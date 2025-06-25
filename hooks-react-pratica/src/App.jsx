@@ -1,62 +1,26 @@
-// src/App.jsx
-
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-// Importe os componentes de exemplo dos Hooks aqui
-import UseStateExemplo from './components/HooksExemplos/UseStateExemplo';
-import UseEffectExemplo from './components/HooksExemplos/UseEffectExemplo';
-// Importe os outros exemplos à medida que você os criar
-// import UseContextExemplo from './components/HooksExemplos/UseContextExemplo';
-// import UseRefExemplo from './components/HooksExemplos/UseRefExemplo';
-// import UseReducerExemplo from './components/HooksExemplos/UseReducerExemplo';
-// import UseCallbackExemplo from './components/HooksExemplos/UseCallbackExemplo';
-// import UseMemoExemplo from './components/HooksExemplos/UseMemoExemplo';
-
+// src/App.js
+import React, { useState } from 'react';
+import { TemaContext } from './contexts/TemaContext'; // Importamos o contexto
+import ComponenteFilho from './components/ComponenteFilho';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tema, setTema] = useState('claro');
+
+  const alternarTema = () => {
+    setTema(tema === 'claro' ? 'escuro' : 'claro');
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    // O Provider envolve os componentes que terão acesso ao tema
+    // O 'value' é o dado que estamos compartilhando
+    <TemaContext.Provider value={tema}>
+      <div style={{ padding: '20px', background: tema === 'claro' ? '#f0f0f0' : '#333', color: tema === 'claro' ? '#333' : '#f0f0f0' }}>
+        <h1>App Principal (Tema: {tema})</h1>
+        <button onClick={alternarTema}>Alternar Tema</button>
+        <ComponenteFilho /> {/* Componente aninhado que consumirá o tema */}
       </div>
-      <h1>Prática de React Hooks</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          Contador Padrão Vite: {count}
-        </button>
-        <p>
-          Edite <code>src/App.jsx</code> e salve para testar HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Clique nos logos Vite e React para aprender mais
-      </p>
-
-      <hr style={{ margin: '40px 0', borderColor: '#eee' }} />
-
-      {/* Renderize seus componentes de exemplo de Hooks aqui */}
-      <h2>Meus Exemplos de Hooks</h2>
-      <UseStateExemplo />
-      <UseEffectExemplo />
-      {/* Adicione os outros exemplos aqui conforme você os criar */}
-      {/* <UseContextExemplo /> */}
-      {/* <UseRefExemplo /> */}
-      {/* <UseReducerExemplo /> */}
-      {/* <UseCallbackExemplo /> */}
-      {/* <UseMemoExemplo /> */}
-
-    </>
-  )
+    </TemaContext.Provider>
+  );
 }
 
-export default App
+export default App;
